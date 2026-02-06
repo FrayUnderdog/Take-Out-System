@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -8,6 +9,8 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
+@Api(tags = "interface of Employee")
 public class EmployeeController {
 
     @Autowired
@@ -32,12 +36,13 @@ public class EmployeeController {
     private JwtProperties jwtProperties;
 
     /**
-     * 登录
+     * login
      *
      * @param employeeLoginDTO
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "login function for Employee")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -62,12 +67,26 @@ public class EmployeeController {
     }
 
     /**
-     * 退出
+     * logout
      *
      * @return
      */
     @PostMapping("/logout")
+    @ApiOperation(value = "logout function for Employee")
     public Result<String> logout() {
+        return Result.success();
+    }
+
+    /**
+     * add a new employee
+     * @param employeeDTO
+     * @return
+     */
+    @PostMapping
+    @ApiOperation("create and save info of a new employee")
+    public Result save(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("info of new employee saved: {}", employeeDTO);
+        employeeService.save(employeeDTO);
         return Result.success();
     }
 
