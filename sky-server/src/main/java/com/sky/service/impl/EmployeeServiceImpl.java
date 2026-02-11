@@ -88,10 +88,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
-        // who Create & Update the user
-        // TODO  get userId from session
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        // who Create & Update the user: implemented by AOP & reflect
+        // get userId from session
+        // employee.setCreateUser(BaseContext.getCurrentId());
+        // employee.setUpdateUser(BaseContext.getCurrentId());
 
         // insert into database
         employeeMapper.insert(employee);
@@ -150,8 +150,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void update(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
     }
 }
