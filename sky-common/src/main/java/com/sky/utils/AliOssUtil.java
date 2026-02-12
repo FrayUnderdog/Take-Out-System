@@ -20,7 +20,7 @@ public class AliOssUtil {
     private String bucketName;
 
     /**
-     * 文件上传
+     * upload file
      *
      * @param bytes
      * @param objectName
@@ -61,7 +61,7 @@ public class AliOssUtil {
                 .append("/")
                 .append(objectName);
 
-        log.info("文件上传到:{}", stringBuilder.toString());
+        log.info("file uploaded to {}", stringBuilder.toString());
 
         return stringBuilder.toString();
     }
