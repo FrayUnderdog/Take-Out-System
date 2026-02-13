@@ -9,10 +9,13 @@ import com.sky.mapper.DishMapper;
 import com.sky.service.DishService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class DishServiceImpl implements DishService {
 
     @Autowired
