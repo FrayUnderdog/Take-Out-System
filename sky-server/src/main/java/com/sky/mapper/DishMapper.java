@@ -56,4 +56,11 @@ public interface DishMapper {
      * @param dish
      */
     void update(Dish dish);
+
+    /**
+     * query dish
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }
