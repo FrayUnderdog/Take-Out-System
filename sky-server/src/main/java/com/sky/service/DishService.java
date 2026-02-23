@@ -52,4 +52,11 @@ public interface DishService {
      * @return
      */
     List<Dish> list(Long categoryId);
+
+    /**
+     * query dishes by setmealId
+     * @param setmealId
+     * @return
+     */
+    List<Dish> getBySetmealId(Long setmealId);
 }

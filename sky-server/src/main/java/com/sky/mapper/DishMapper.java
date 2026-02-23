@@ -63,4 +63,12 @@ public interface DishMapper {
      * @return
      */
     List<Dish> list(Dish dish);
+
+    /**
+     * query dish by setmealId
+     * @param id
+     * @return
+     */
+    @Select("select * from dish where setmeal_id = #{id}")
+    List<Dish> getBySetmealId(Long id);
 }
