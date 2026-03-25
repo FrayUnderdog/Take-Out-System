@@ -59,4 +59,11 @@ public interface DishService {
      * @return
      */
     List<Dish> getBySetmealId(Long setmealId);
+
+    /**
+     * conditional query dishes with its flavors
+     * @param dish
+     * @return
+     */
+    List<DishVO> listWithFlavor(Dish dish);
 }
