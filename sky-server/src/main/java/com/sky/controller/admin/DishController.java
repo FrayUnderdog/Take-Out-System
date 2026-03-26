@@ -11,9 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -23,6 +25,8 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * create & save new dish
@@ -34,6 +38,11 @@ public class DishController {
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("create & save new dish: {}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
+
+        // clean cache specifically
+        String key = "dish_" + dishDTO.getCategoryId();
+        redisTemplate.delete(key);
+
         return Result.success();
     }
 
@@ -60,6 +69,10 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids) {
         log.info("delete these dishes by id: {}", ids);
         dishService.deleteBatch(ids);
+
+        // clean cache
+        cleanCache("dish_*");
+
         return Result.success();
     }
 
@@ -101,6 +114,18 @@ public class DishController {
         log.info("update dish: {}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
 
+        // clean cache
+        cleanCache("dish_*");
+
         return Result.success();
+    }
+
+    /**
+     * clean redis cache
+     * @param pattern
+     */
+    private void cleanCache(String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }
