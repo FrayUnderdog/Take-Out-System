@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +50,7 @@ public class SetmealController {
      */
     @GetMapping("/list")
     @ApiOperation("list dishes by categoryId")
+    @Cacheable(cacheNames = "setmealsCache", key = "#categoryId")
     public Result<List<Dish>> list(Long categoryId) {
         log.info("list dishes by categoryId: {}", categoryId);
         List<Dish> listDishes = dishService.list(categoryId);
@@ -74,6 +77,7 @@ public class SetmealController {
      */
     @DeleteMapping
     @ApiOperation("delete Setmeals by ids")
+    @CacheEvict(cacheNames = "setmealsCache", allEntries = true)
     public Result delete(@RequestParam List<Long> ids) {
         log.info("delete these setmeals by id: {}", ids);
         setmealService.deleteBatch(ids);
@@ -88,6 +92,7 @@ public class SetmealController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation("change the status of this set meal")
+    @CacheEvict(cacheNames = "setmealsCache", allEntries = true)
     public Result startOrStop(@PathVariable Integer status, Long id) {
         log.info("change the status of this set meal with id: {}",  id);
         setmealService.startOrStop(status, id);
@@ -101,6 +106,7 @@ public class SetmealController {
      */
     @PutMapping
     @ApiOperation("update Setmeal")
+    @CacheEvict(cacheNames = "setmealsCache", allEntries = true)
     public Result<SetmealVO> update(@RequestBody SetmealDTO setmealDTO) {
         log.info("update Setmeal: {}", setmealDTO);
         SetmealVO updatedSetmealVO = setmealService.update(setmealDTO);
@@ -109,6 +115,7 @@ public class SetmealController {
 
     @GetMapping("/{id}")
     @ApiOperation("get Setmeal by id")
+    @Cacheable(cacheNames = "setmealsCache", key = "#id")
     public Result<SetmealVO> getById(@PathVariable Long id) {
         log.info("get Setmeal by id: {}", id);
         SetmealVO setmealVO = setmealService.getById(id);
